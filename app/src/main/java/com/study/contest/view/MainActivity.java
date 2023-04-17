@@ -15,10 +15,6 @@ import com.study.contest.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EMAIL_ERROR = "Почта не может быть пустой";
-    public static final String PASSWORD_ERROR = "Пароль не может быть пустым";
-    public static final String CANT_LOGIN = "Неправильный пароль или логин";
-    private Button loginButton;
     private FirebaseAuth firebaseAuth;
     private Intent firstPage;
     private EditText etEmail;
@@ -31,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseApp.initializeApp(MainActivity.this);
 
-        loginButton = findViewById(R.id.logInButton);
+        Button loginButton = findViewById(R.id.logInButton);
         etEmail = findViewById(R.id.emailTextEdit);
         etPassword = findViewById(R.id.editTextPassword);
 
@@ -57,17 +53,17 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            etEmail.setError(EMAIL_ERROR);
+            etEmail.setError(getString(R.string.login_can_not_be_empty));
             etEmail.requestFocus();
         } else if (TextUtils.isEmpty(password)) {
-            etPassword.setError(PASSWORD_ERROR);
+            etPassword.setError(getString(R.string.password_can_not_be_empty));
             etPassword.requestFocus();
         } else {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             startActivity(firstPage);
                         } else if (task.isComplete()) {
-                            etPassword.setError(CANT_LOGIN);
+                            etPassword.setError(getString(R.string.login_or_password_error));
                         }
                     }
             );

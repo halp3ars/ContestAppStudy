@@ -1,7 +1,5 @@
 package com.study.contest.model;
 
-import java.time.LocalDate;
-
 public class UserRecord {
 
     private String id;

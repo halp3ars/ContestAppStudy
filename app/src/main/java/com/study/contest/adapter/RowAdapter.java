@@ -12,18 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.study.contest.R;
-import com.study.contest.model.ColumEnum;
 import com.study.contest.model.UserRecord;
+import com.study.contest.model.enums.ColumEnum;
 import com.study.contest.view.EditNote;
 
 import java.util.List;
 
 public class RowAdapter extends RecyclerView.Adapter<RowAdapter.ViewHolder> {
-
-
-    private List<UserRecord> userRecords;
-    private Context context;
-    private Activity activity;
+    private final List<UserRecord> userRecords;
+    private final Context context;
+    private final Activity activity;
 
     public RowAdapter(List<UserRecord> userRecords, Context context, Activity activity) {
         this.userRecords = userRecords;
@@ -60,7 +58,7 @@ public class RowAdapter extends RecyclerView.Adapter<RowAdapter.ViewHolder> {
         return userRecords.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tittle;
         TextView date;
 

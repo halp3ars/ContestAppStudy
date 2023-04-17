@@ -7,11 +7,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
+
 
 public class UserRecordsHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "user_records.db";
@@ -22,7 +24,7 @@ public class UserRecordsHelper extends SQLiteOpenHelper {
     public static final String CONTENT = "content";
     public static final String DATE = "date";
 
-    private Context context;
+    private final Context context;
 
     public UserRecordsHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,6 +55,7 @@ public class UserRecordsHelper extends SQLiteOpenHelper {
         contentValues.put(CONTENT, content);
         contentValues.put(DATE, String.valueOf(date));
         long result = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+        Looper.prepare();
         if (isError(result)) {
             makeText(context, "Произошла ошибка при добавлении записи. Повторите еще раз", Toast.LENGTH_SHORT).show();
         } else {
@@ -101,8 +104,4 @@ public class UserRecordsHelper extends SQLiteOpenHelper {
         return result == -1;
     }
 
-    public void deleteAll() {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.execSQL("DELETE FROM " + TABLE_NAME);
-    }
 }

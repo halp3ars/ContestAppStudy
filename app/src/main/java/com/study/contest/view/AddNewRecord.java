@@ -1,9 +1,9 @@
 package com.study.contest.view;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,6 @@ import java.time.LocalDate;
 
 public class AddNewRecord extends AppCompatActivity {
 
-    private FloatingActionButton btnNewRecord;
     private EditText newRecordText;
     private EditText newRecordTitle;
 
@@ -26,7 +25,7 @@ public class AddNewRecord extends AppCompatActivity {
 
         newRecordTitle = findViewById(R.id.notTittleView);
         newRecordText = findViewById(R.id.noteTextView);
-        btnNewRecord = findViewById(R.id.fltAddNote);
+        FloatingActionButton btnNewRecord = findViewById(R.id.fltAddNote);
 
         btnNewRecord.setOnClickListener(view -> addNewRecord());
 
@@ -34,9 +33,12 @@ public class AddNewRecord extends AppCompatActivity {
 
 
     private void addNewRecord() {
-        UserRecordsHelper userRecordsHelper = new UserRecordsHelper(AddNewRecord.this);
-        userRecordsHelper.addRecord(newRecordTitle.getText().toString(), newRecordText.getText().toString(), LocalDate.now());
-        finish();
+        try (UserRecordsHelper userRecordsHelper = new UserRecordsHelper(AddNewRecord.this)) {
+            AsyncTask.execute(() -> userRecordsHelper.addRecord(newRecordTitle.getText().toString(), newRecordText.getText().toString(), LocalDate.now()));
+            finish();
+        } catch (Exception e) {
+            Log.getStackTraceString(e.fillInStackTrace());
+        }
     }
 
 

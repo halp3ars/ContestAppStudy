@@ -1,30 +1,30 @@
 package com.study.contest.view;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.study.contest.R;
 import com.study.contest.db.UserRecordsHelper;
-import com.study.contest.model.ColumEnum;
+import com.study.contest.model.enums.ColumEnum;
 
 import java.time.LocalDate;
 
 public class EditNote extends AppCompatActivity {
 
 
-    private FloatingActionButton fltEdit;
-    private FloatingActionButton fltDelete;
+    public static final String DELETE = "Удалить ";
+    public static final String SUBMIT_YES = "Да";
+    public static final String SUBMIT_NOT = "Нет";
     private EditText titleEditText;
     private EditText contentEditText;
     private String content;
     private String id;
-    private String date;
     private String title;
 
 
@@ -33,11 +33,12 @@ public class EditNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
 
-        fltEdit = findViewById(R.id.fltEditedUpdate);
-        fltDelete = findViewById(R.id.fltDelete);
+        FloatingActionButton fltEdit = findViewById(R.id.fltEditedUpdate);
+        FloatingActionButton fltDelete = findViewById(R.id.fltDelete);
 
         titleEditText = findViewById(R.id.titleEditNote);
         contentEditText = findViewById(R.id.editNotContent);
+
 
         insertData();
 
@@ -53,13 +54,22 @@ public class EditNote extends AppCompatActivity {
         id = getIntent().getStringExtra(ColumEnum.ID.getName());
         title = getIntent().getStringExtra(ColumEnum.TITLE.getName());
         content = getIntent().getStringExtra(ColumEnum.CONTENT.getName());
-        date = getIntent().getStringExtra(ColumEnum.DATE.getName());
 
         titleEditText.setText(title);
         contentEditText.setText(content);
 
     }
 
+    void confirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(DELETE + title + " ?");
+        builder.setMessage(getString(R.string.submit_delete) + " " + title + " ?");
+        builder.setPositiveButton(SUBMIT_YES, (dialogInterface, i) -> new DeleteNote().execute());
+
+        builder.setNegativeButton(SUBMIT_NOT, (dialogInterface, i) -> {
+        });
+        builder.create().show();
+    }
 
     private class UpdateRecord extends AsyncTask<Void, Void, Void> {
 
@@ -76,23 +86,10 @@ public class EditNote extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void unused) {
-            Toast.makeText(EditNote.this, "Запись успешно обновлена!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditNote.this, getString(R.string.update_successful), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
-
-
-    void confirmDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Удалить " + title + " ?");
-        builder.setMessage("Вы уверены что хотите удалить " + title + " ?");
-        builder.setPositiveButton("Да", (dialogInterface, i) -> new DeleteNote().execute());
-
-        builder.setNegativeButton("Нет", (dialogInterface, i) -> {
-        });
-        builder.create().show();
-    }
-
 
     private class DeleteNote extends AsyncTask<Void, Void, Void> {
 

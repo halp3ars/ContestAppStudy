@@ -1,4 +1,4 @@
-package com.study.contest.model;
+package com.study.contest.model.enums;
 
 public enum ColumEnum {
 
@@ -9,20 +9,19 @@ public enum ColumEnum {
     DATE(3, "DATE");
 
 
+    private final Integer columnIndex;
+    private final String name;
+
+    ColumEnum(Integer columnIndex, String name) {
+        this.columnIndex = columnIndex;
+        this.name = name;
+    }
+
     public Integer getColumnIndex() {
         return columnIndex;
     }
 
     public String getName() {
         return name;
-    }
-
-    private final Integer columnIndex;
-    private final String name;
-
-
-    ColumEnum(Integer columnIndex, String name) {
-        this.columnIndex = columnIndex;
-        this.name = name;
     }
 }
